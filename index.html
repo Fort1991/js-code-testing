@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,66 @@
     <title>Document</title>
     <link rel="shortcut icon" href="https://placekitten.com/96/139" type="image/x-icon">
 </head>
+
 <body>
     <script src="https://unpkg.com/html-data-include@3.3.3/html-data-include.js"></script>
+    <h1 id="heading">Find the buried treasure</h1>
+    <img id="map" src="https://nostarch.com/images/treasuremap.png" width="800" height="800">
+    <p id="distance"></p>
+    <p id="remainingClicks"></p>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script>
+        let getRandomNumber = function (size) {
+            return Math.floor(Math.random() * size);
+        };
+        let getDistance = function (event, target) {
+            let diffX = event.offsetX - target.x;
+            let diffY = event.offsetY - target.y;
+            return Math.sqrt((diffX * diffX) + (diffY * diffY));
+        };
+        let getDistanceHint = function (distance) {
+            if (distance < 10) {
+                return "Boiling hot";
+            } else if (distance < 20) {
+                return "Really hot";
+            } else if (distance < 40) {
+                return "Hot";
+            } else if (distance < 80) {
+                return "Warm";
+            } else if (distance < 160) {
+                return "Cold";
+            } else if (distance < 320) {
+                return "Really cold";
+            } else if (distance < 420) {
+                return "Freezing";
+            } else {
+                return "WINTER IS COMING";
+            }
+        };
+        let width = 800;
+        let height = 800;
+        let clicks = 0;
+        let maxClicks = 10;
+        let target = {
+            x: getRandomNumber(width),
+            y: getRandomNumber(height)
+        };
+        $("#map").click(function (event) {
+            if (clicks < maxClicks) {
+                clicks++;
+                let distance = getDistance(event, target);
+                let distanceHint = getDistanceHint(distance);
+                $("#distance").text(distanceHint);
+                $("#remainingClicks").text("Remaining clicks: " + (maxClicks - clicks));
+                if (distance < 16) {
+                    alert("Found the treasure in " + clicks + " clicks");
+                } else if (clicks === maxClicks){
+                    alert("GAME OVER");
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>
